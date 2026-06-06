@@ -98,4 +98,16 @@ class QuoteCalculatorService
 
         return $subtotal + (self::BAGAGEM_DAILY_RATE * $diasCobrados);
     }
+
+    private function resolveAppliedAddons(array $adicionaisSolicitados, int $idade): array
+    {
+        return array_values(array_filter(
+            $adicionaisSolicitados,
+            fn (string $adicional): bool => match ($adicional) {
+                'BAGAGEM' => true,
+                'ESPORTES_AVENTURA' => $idade >= self::ESPORTES_MIN_AGE && $idade <= self::ESPORTES_MAX_AGE,
+                default => false,
+            }
+        ));
+    }
 }
