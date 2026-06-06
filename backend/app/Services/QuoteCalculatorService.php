@@ -69,6 +69,40 @@ class QuoteCalculatorService
         return self::ZONE_DAILY_RATES[$destino];
     }
 
+    private function calculateTraveler(
+        array $viajante,
+        float $tarifaDiaria,
+        int $diasCobrados,
+        string $dataInicio,
+        array &$avisos
+    ): array {
+        $idade = $this->calculateAgeAt($viajante['data_nascimento'], $dataInicio);
+        $multiplicador = $this->resolveAgeMultiplier($idade);
+        $adicionaisSolicitados = $viajante['adicionais'];
+
+        $subtotal = $tarifaDiaria * $diasCobrados * $multiplicador;
+
+        $subtotal = $this->applyEsportesAventura(
+            $subtotal,
+            $idade,
+            $viajante['nome'],
+            $adicionaisSolicitados,
+            $avisos
+        );
+
+        $subtotal = $this->applyBagagem($diasCobrados, $adicionaisSolicitados, $subtotal);
+
+        return [
+            'viajante' => [
+                'nome' => $viajante['nome'],
+                'idade' => $idade,
+                'subtotal' => $this->roundForDisplay($subtotal),
+                'adicionais_aplicados' => $this->resolveAppliedAddons($adicionaisSolicitados, $idade),
+            ],
+            'subtotal_bruto' => $subtotal,
+        ];
+    }
+
     private function calculateAgeAt(string $dataNascimento, string $dataReferencia): int
     {
         return (int) Carbon::parse($dataNascimento)
