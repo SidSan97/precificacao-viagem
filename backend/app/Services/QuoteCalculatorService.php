@@ -111,6 +111,15 @@ class QuoteCalculatorService
         ));
     }
 
+    private function resolveGroupDiscountPercent(int $quantidadeViajantes): int
+    {
+        if ($quantidadeViajantes >= self::GROUP_DISCOUNT_MIN_TRAVELERS) {
+            return (int) (self::GROUP_DISCOUNT_RATE * 100);
+        }
+
+        return 0;
+    }
+
     private function calculateFinalTotal(array $subtotaisBrutos, int $descontoPercentual): float
     {
         $totalGrupo = array_sum($subtotaisBrutos);
