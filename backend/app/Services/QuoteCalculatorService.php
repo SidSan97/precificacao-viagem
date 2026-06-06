@@ -111,6 +111,14 @@ class QuoteCalculatorService
         ));
     }
 
+    private function calculateFinalTotal(array $subtotaisBrutos, int $descontoPercentual): float
+    {
+        $totalGrupo = array_sum($subtotaisBrutos);
+        $desconto = $totalGrupo * ($descontoPercentual / 100);
+
+        return $this->roundTotal($totalGrupo - $desconto);
+    }
+
     private function roundForDisplay(float $value): float
     {
         return round($value, 2, PHP_ROUND_HALF_UP);
