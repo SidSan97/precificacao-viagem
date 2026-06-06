@@ -61,4 +61,41 @@ class QuoteCalculatorService
 
         return 2.0;
     }
+
+    private function applyEsportesAventura(
+        float $subtotal,
+        int $idade,
+        string $nome,
+        array $adicionaisSolicitados,
+        array &$avisos
+    ): float {
+        if (! in_array('ESPORTES_AVENTURA', $adicionaisSolicitados, true)) {
+            return $subtotal;
+        }
+
+        if ($idade < self::ESPORTES_MIN_AGE || $idade > self::ESPORTES_MAX_AGE) {
+            $avisos[] = sprintf(
+                'ESPORTES_AVENTURA não aplicado para %s: fora da faixa etária permitida (%d-%d).',
+                $nome,
+                self::ESPORTES_MIN_AGE,
+                self::ESPORTES_MAX_AGE
+            );
+
+            return $subtotal;
+        }
+
+        return $subtotal + ($subtotal * self::ESPORTES_AVENTURA_RATE);
+    }
+
+    private function applyBagagem(
+        int $diasCobrados,
+        array $adicionaisSolicitados,
+        float $subtotal
+    ): float {
+        if (! in_array('BAGAGEM', $adicionaisSolicitados, true)) {
+            return $subtotal;
+        }
+
+        return $subtotal + (self::BAGAGEM_DAILY_RATE * $diasCobrados);
+    }
 }
