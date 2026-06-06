@@ -25,4 +25,14 @@ class QuoteCalculatorService
     {
         
     }
+
+    private function calculateChargedDays(string $dataInicio, string $dataFim): int
+    {
+        $inicio = Carbon::parse($dataInicio)->startOfDay();
+        $fim = Carbon::parse($dataFim)->startOfDay();
+
+        $dias = $inicio->diffInDays($fim) + 1;
+
+        return (int) max($dias, self::MIN_CHARGED_DAYS);
+    }
 }
