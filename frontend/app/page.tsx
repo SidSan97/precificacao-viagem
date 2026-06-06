@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import CardResult from "./components/cardResult";
 import { formatValidationError } from "./hookies/format-errors";
@@ -34,6 +34,13 @@ export default function Home() {
   const [dataFim, setDataFim] = useState("");
   const [viajantes, setViajantes] = useState<ViajanteForm[]>([createViajante()]);
   const { loading, result, errors, generalError, submitQuote } = useQuote();
+  const resultRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!result) return;
+
+    resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [result]);
 
   function updateViajante(
     index: number,
@@ -266,7 +273,7 @@ export default function Home() {
           </section>
         )}
 
-        {result && <CardResult result={result} />}
+        {result && <CardResult ref={resultRef} result={result} />}
       </main>
     </div>
   );

@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+
 import type { Adicional, QuoteResult } from "../hookies/types";
 
 const ADICIONAL_LABELS: Record<Adicional, string> = {
@@ -20,9 +22,15 @@ function adicionalLabel(value: Adicional): string {
   return ADICIONAL_LABELS[value];
 }
 
-export default function CardResult({ result }: CardResultProps) {
+const CardResult = forwardRef<HTMLElement, CardResultProps>(function CardResult(
+  { result },
+  ref
+) {
   return (
-    <section className="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+    <section
+      ref={ref}
+      className="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm"
+    >
       <h2 className="mb-4 text-lg font-medium text-zinc-900">Resultado</h2>
 
       <div className="mb-6 grid gap-3 rounded-xl bg-zinc-50 p-4 text-sm sm:grid-cols-3">
@@ -81,4 +89,6 @@ export default function CardResult({ result }: CardResultProps) {
       )}
     </section>
   );
-}
+});
+
+export default CardResult;
