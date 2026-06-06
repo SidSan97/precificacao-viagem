@@ -48,4 +48,17 @@ class QuoteCalculatorService
             ->diff(Carbon::parse($dataReferencia)->startOfDay())
             ->y;
     }
+
+    private function resolveAgeMultiplier(int $idade): float
+    {
+        if ($idade <= 17) {
+            return 0.5;
+        }
+
+        if ($idade <= 64) {
+            return 1.0;
+        }
+
+        return 2.0;
+    }
 }
