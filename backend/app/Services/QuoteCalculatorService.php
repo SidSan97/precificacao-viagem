@@ -35,4 +35,9 @@ class QuoteCalculatorService
 
         return (int) max($dias, self::MIN_CHARGED_DAYS);
     }
+
+    private function resolveDailyRate(string $destino): float
+    {
+        return self::ZONE_DAILY_RATES[$destino];
+    }
 }
