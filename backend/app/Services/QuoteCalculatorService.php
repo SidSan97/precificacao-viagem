@@ -40,4 +40,12 @@ class QuoteCalculatorService
     {
         return self::ZONE_DAILY_RATES[$destino];
     }
+
+    private function calculateAgeAt(string $dataNascimento, string $dataReferencia): int
+    {
+        return (int) Carbon::parse($dataNascimento)
+            ->startOfDay()
+            ->diff(Carbon::parse($dataReferencia)->startOfDay())
+            ->y;
+    }
 }
