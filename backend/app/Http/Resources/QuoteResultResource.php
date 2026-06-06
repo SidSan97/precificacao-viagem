@@ -8,12 +8,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class QuoteResultResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'dias_cobrados' => $this->resource['dias_cobrados'],
+            'viajantes' => $this->resource['viajantes'],
+            'avisos' => $this->resource['avisos'],
+            'desconto_grupo_percentual' => $this->resource['desconto_grupo_percentual'],
+            'total_final' => $this->resource['total_final'],
+        ];
     }
 }
