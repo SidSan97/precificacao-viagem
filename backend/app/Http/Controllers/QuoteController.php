@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CreateQuoteRequest;
+use App\Http\Resources\QuoteResultResource;
 use App\Services\QuoteCalculatorService;
 
 class QuoteController extends Controller
@@ -14,8 +15,12 @@ class QuoteController extends Controller
         $this->quoteCalculatorService = $quoteCalculatorService;
     }
 
-    public function calculate(Request $request)
+    public function calculate(CreateQuoteRequest $request)
     {
-       
+        $data = $request->validated();
+
+        $quote = $this->quoteCalculatorService->calculate($data);
+
+        return new QuoteResultResource($quote);
     }
 }
