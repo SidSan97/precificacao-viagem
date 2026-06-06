@@ -20,4 +20,9 @@ class QuoteCalculatorService
     private const ESPORTES_MAX_AGE = 64;
     private const GROUP_DISCOUNT_MIN_TRAVELERS = 5;
     private const GROUP_DISCOUNT_RATE = 0.10;
+
+    public function calculate(array $data): array
+    {
+        
+    }
 }
