@@ -34,8 +34,8 @@ class CreateQuoteRequest extends FormRequest
             'viajantes' => ['required', 'array', 'min:1'],
             'viajantes.*.nome' => ['required', 'string', 'max:255'],
             'viajantes.*.data_nascimento' => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:today'],
-            'viajantes.*.adicionais' => ['present', 'array'],
-            'viajantes.*.adicionais.*' => ['string', 'distinct', Rule::in(self::ADICIONAIS)],
+            'viajantes.*.adicionais' => ['present', 'array', 'distinct'],
+            'viajantes.*.adicionais.*' => ['string', Rule::in(self::ADICIONAIS)],
         ];
     }
 
@@ -50,7 +50,7 @@ class CreateQuoteRequest extends FormRequest
             'viajantes.required' => 'Informe ao menos um viajante.',
             'viajantes.min' => 'Informe ao menos um viajante.',
             'viajantes.*.adicionais.*.in' => 'Os adicionais permitidos são: '.implode(', ', self::ADICIONAIS).'.',
-            'viajantes.*.adicionais.*.distinct' => 'Não é permitido informar adicionais duplicados.',
+            'viajantes.*.adicionais.distinct' => 'Não é permitido informar adicionais duplicados.',
         ];
     }
 }
