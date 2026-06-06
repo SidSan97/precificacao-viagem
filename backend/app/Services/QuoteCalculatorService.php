@@ -110,4 +110,14 @@ class QuoteCalculatorService
             }
         ));
     }
+
+    private function roundForDisplay(float $value): float
+    {
+        return round($value, 2, PHP_ROUND_HALF_UP);
+    }
+
+    private function roundTotal(float $value): float
+    {
+        return round($value, 2, PHP_ROUND_HALF_UP);
+    }
 }
