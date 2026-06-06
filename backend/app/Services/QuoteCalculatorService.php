@@ -23,7 +23,35 @@ class QuoteCalculatorService
 
     public function calculate(array $data): array
     {
-        
+        $diasCobrados = $this->calculateChargedDays($data['data_inicio'], $data['data_fim']);
+        $tarifaDiaria = $this->resolveDailyRate($data['destino']);
+        $avisos = [];
+        $viajantes = [];
+        $subtotaisBrutos = [];
+
+        foreach ($data['viajantes'] as $viajante) {
+            $resultado = $this->calculateTraveler(
+                $viajante,
+                $tarifaDiaria,
+                $diasCobrados,
+                $data['data_inicio'],
+                $avisos
+            );
+
+            $viajantes[] = $resultado['viajante'];
+            $subtotaisBrutos[] = $resultado['subtotal_bruto'];
+        }
+
+        $descontoPercentual = $this->resolveGroupDiscountPercent(count($data['viajantes']));
+        $totalFinal = $this->calculateFinalTotal($subtotaisBrutos, $descontoPercentual);
+
+        return [
+            'dias_cobrados' => $diasCobrados,
+            'viajantes' => $viajantes,
+            'avisos' => $avisos,
+            'desconto_grupo_percentual' => $descontoPercentual,
+            'total_final' => $totalFinal,
+        ];
     }
 
     private function calculateChargedDays(string $dataInicio, string $dataFim): int
