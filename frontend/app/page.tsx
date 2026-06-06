@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
+import { formatValidationError } from "./hookies/format-errors";
 import type { Adicional, Destino } from "./hookies/types";
 import { useQuote } from "./hookies/useQuote";
 
@@ -266,7 +267,7 @@ export default function Home() {
                 {Object.entries(errors).flatMap(([field, messages]) =>
                   messages.map((message) => (
                     <li key={`${field}-${message}`}>
-                      <span className="font-medium">{field}:</span> {message}
+                      {formatValidationError(field, message)}
                     </li>
                   ))
                 )}
