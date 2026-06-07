@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->integer('dias_cobrados');
+            $table->date('data_inicio');
+            $table->date('data_fim');
+            $table->string('destino');
             $table->decimal('total_final', 10, 2);
             $table->timestamps();
         });
