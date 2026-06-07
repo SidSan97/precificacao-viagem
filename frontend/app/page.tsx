@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import CardResult from "./components/cardResult";
 import { formatValidationError } from "./hookies/format-errors";
 import type { Adicional, Destino } from "./hookies/types";
 import { useQuote } from "./hookies/useQuote";
@@ -29,18 +29,12 @@ function createViajante(): ViajanteForm {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [destino, setDestino] = useState<Destino>("NACIONAL");
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
   const [viajantes, setViajantes] = useState<ViajanteForm[]>([createViajante()]);
-  const { loading, result, errors, generalError, submitQuote } = useQuote();
-  const resultRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!result) return;
-
-    resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [result]);
+  const { loading, errors, generalError, submitQuote } = useQuote();
 
   function updateViajante(
     index: number,
@@ -81,10 +75,10 @@ export default function Home() {
     );
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    submitQuote({
+    const success = await submitQuote({
       destino,
       data_inicio: dataInicio,
       data_fim: dataFim,
@@ -94,6 +88,10 @@ export default function Home() {
         adicionais: viajante.adicionais,
       })),
     });
+
+    if (success) {
+      router.push("/resultado");
+    }
   }
 
   const fieldClass =
@@ -272,8 +270,6 @@ export default function Home() {
             )}
           </section>
         )}
-
-        {result && <CardResult ref={resultRef} result={result} />}
       </main>
     </div>
   );

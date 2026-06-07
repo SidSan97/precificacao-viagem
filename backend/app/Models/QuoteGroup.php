@@ -17,6 +17,9 @@ class QuoteGroup extends Model
     protected $fillable = [
         'uuid',
         'dias_cobrados',
+        'data_inicio',
+        'data_fim',
+        'destino',
         'total_final',
     ];
 
