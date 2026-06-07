@@ -158,13 +158,6 @@ export default function Home() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-medium text-zinc-900">Viajantes</h2>
-              <button
-                type="button"
-                onClick={addViajante}
-                className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
-              >
-                Adicionar viajante
-              </button>
             </div>
 
             {viajantes.map((viajante, index) => (
@@ -242,6 +235,13 @@ export default function Home() {
                 </div>
               </article>
             ))}
+            <button
+              type="button"
+              onClick={addViajante}
+              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
+            >
+              Adicionar viajante
+            </button>
           </section>
 
           <button
