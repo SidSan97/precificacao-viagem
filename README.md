@@ -37,7 +37,7 @@ precificacao-viagem/
 
 ## Pré-requisitos
 
-- PHP 8.2+ com extensões `pdo`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`
+- PHP 8.2+
 - Composer
 - Node.js 20+
 - npm
