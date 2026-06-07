@@ -29,7 +29,7 @@ class CreateQuoteRequest extends FormRequest
     {
         return [
             'destino' => ['required', 'string', Rule::in(self::DESTINOS)],
-            'data_inicio' => ['required', 'date', 'date_format:Y-m-d'],
+            'data_inicio' => ['required', 'date', 'date_format:Y-m-d', 'after_or_equal:today'],
             'data_fim' => ['required', 'date', 'date_format:Y-m-d', 'after_or_equal:data_inicio'],
             'viajantes' => ['required', 'array', 'min:1'],
             'viajantes.*.nome' => ['required', 'string', 'max:255'],
@@ -49,6 +49,7 @@ class CreateQuoteRequest extends FormRequest
             'data_inicio.required' => 'Informe a data de início da viagem.',
             'data_inicio.date' => 'A data de início da viagem não é válida.',
             'data_inicio.date_format' => 'A data de início da viagem deve ser uma data válida (ex.: 2026-07-10).',
+            'data_inicio.after_or_equal' => 'A data de início não pode ser anterior à data atual.',
             'data_fim.required' => 'Informe a data fim da viagem.',
             'data_fim.date' => 'A data fim da viagem não é válida.',
             'data_fim.date_format' => 'A data fim da viagem deve ser uma data válida (ex.: 2026-07-20).',
