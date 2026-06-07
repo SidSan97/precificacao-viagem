@@ -15,6 +15,9 @@ class QuoteGroupResource extends JsonResource
         return [
             'dias_cobrados' => $this->dias_cobrados,
             'total_final' => $this->total_final,
+            'data_inicio' => $this->data_inicio,
+            'data_fim' => $this->data_fim,
+            'destino' => $this->destino,
             'viajantes' => ViajanteResource::collection($this->whenLoaded('viajantes')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
