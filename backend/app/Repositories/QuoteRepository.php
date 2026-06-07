@@ -13,7 +13,16 @@ class QuoteRepository
     public function all(): Collection
     {
         return QuoteGroup::query()
-            ->select(['id', 'dias_cobrados', 'total_final', 'created_at', 'updated_at'])
+            ->select([
+                'id',
+                'dias_cobrados',
+                'data_inicio',
+                'data_fim',
+                'destino',
+                'total_final',
+                'created_at',
+                'updated_at',
+            ])
             ->with([
                 'viajantes:id,quote_group_id,nome,data_nascimento,subtotal,adicionais_aplicados',
                 'viajantes.avisos:id,viajante_id,aviso',
@@ -27,6 +36,9 @@ class QuoteRepository
         return DB::transaction(function () use ($payload, $result): QuoteGroup {
             $quoteGroup = QuoteGroup::create([
                 'dias_cobrados' => $result['dias_cobrados'],
+                'data_inicio' => $payload['data_inicio'],
+                'data_fim' => $payload['data_fim'],
+                'destino' => $payload['destino'],
                 'total_final' => $result['total_final'],
             ]);
 
