@@ -30,3 +30,26 @@ export interface QuoteApiError {
   message: string;
   errors: Record<string, string[]>;
 }
+
+export interface StoredQuoteAviso {
+  aviso: string;
+}
+
+export interface StoredQuoteViajante {
+  nome: string;
+  data_nascimento: string;
+  subtotal: string | number;
+  adicionais_aplicados: Adicional[];
+  avisos: StoredQuoteAviso[];
+}
+
+export interface StoredQuote {
+  dias_cobrados: number;
+  total_final: string | number;
+  data_inicio: string;
+  data_fim: string;
+  destino: Destino;
+  viajantes: StoredQuoteViajante[];
+  created_at: string;
+  updated_at: string;
+}
