@@ -270,10 +270,10 @@ export default function Home() {
           >
             <h2 className="mb-2 font-medium">Erro</h2>
             { /*<p className="text-sm">{generalError}</p> */}
-            {Object.keys(errors).length > 0 && (
+            {Object.keys(errors ?? {}).length > 0 && (
               <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
-                {Object.entries(errors).flatMap(([field, messages]) =>
-                  messages.map((message) => (
+                {Object.entries(errors ?? {}).flatMap(([field, messages]) =>
+                  (messages ?? []).map((message) => (
                     <li key={`${field}-${message}`}>
                       {formatValidationError(field, message)}
                     </li>

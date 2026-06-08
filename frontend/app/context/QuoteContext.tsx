@@ -11,6 +11,7 @@ import {
 
 import { calculateQuote } from "../hookies/quote-api";
 import type { QuotePayload, QuoteResult } from "../hookies/types";
+import { QUOTE_SERVER_ERROR_MESSAGE } from "../hookies/types";
 
 interface QuoteContextValue {
   loading: boolean;
@@ -59,14 +60,12 @@ export function QuoteProvider({ children }: { children: ReactNode }) {
       return true;
     } catch (error) {
       if (isQuoteApiError(error)) {
-        setErrors(error.errors);
+        setErrors(error.errors ?? {});
         setGeneralError(error.message);
         return false;
       }
 
-      setGeneralError(
-        "Falha na comunicação com a API. Verifique se o backend está em execução."
-      );
+      setGeneralError(QUOTE_SERVER_ERROR_MESSAGE);
       return false;
     } finally {
       setLoading(false);

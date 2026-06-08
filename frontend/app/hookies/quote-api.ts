@@ -1,9 +1,6 @@
-import type {
-  QuoteApiError,
-  QuotePayload,
-  QuoteResult,
-  StoredQuote,
-} from "./types";
+import { parseApiError } from "./parse-api-error";
+import type { QuotePayload, QuoteResult, StoredQuote } from "./types";
+import { QUOTE_SERVER_ERROR_MESSAGE } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 
@@ -15,40 +12,47 @@ export async function fetchQuotes(): Promise<StoredQuote[]> {
     cache: "no-store",
   });
 
-  const json = await response.json();
-
   if (!response.ok) {
-    const error: QuoteApiError = {
-      message: json.message ?? "Não foi possível carregar as cotações.",
-      errors: json.errors ?? {},
-    };
-
-    throw error;
+    throw await parseApiError(
+      response,
+      "Não foi possível carregar as cotações.",
+      "Não foi possível carregar as cotações. Tente novamente mais tarde."
+    );
   }
+
+  const json = await response.json();
 
   return (json.data ?? json) as StoredQuote[];
 }
 
 export async function calculateQuote(payload: QuotePayload): Promise<QuoteResult> {
-  const response = await fetch(`${API_URL}/quotes`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  let response: Response;
 
-  const json = await response.json();
+  try {
+    response = await fetch(`${API_URL}/quotes`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw {
+      message: QUOTE_SERVER_ERROR_MESSAGE,
+      errors: {},
+    };
+  }
 
   if (!response.ok) {
-    const error: QuoteApiError = {
-      message: json.message ?? "Não foi possível calcular a cotação.",
-      errors: json.errors ?? {},
-    };
-
-    throw error;
+    throw await parseApiError(
+      response,
+      "Não foi possível calcular a cotação.",
+      QUOTE_SERVER_ERROR_MESSAGE
+    );
   }
+
+  const json = await response.json();
 
   return (json.data ?? json) as QuoteResult;
 }

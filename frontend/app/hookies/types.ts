@@ -29,7 +29,11 @@ export interface QuoteResult {
 export interface QuoteApiError {
   message: string;
   errors: Record<string, string[]>;
+  status?: number;
 }
+
+export const QUOTE_SERVER_ERROR_MESSAGE =
+  "Não foi possível calcular o preço. Tente novamente mais tarde.";
 
 export interface StoredQuoteAviso {
   aviso: string;
