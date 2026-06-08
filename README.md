@@ -14,6 +14,7 @@ Sistema para cotação de seguro viagem. O usuário informa destino, período e 
 
 ```
 precificacao-viagem/
+├── docker-compose.yml
 ├── backend/          # API Laravel
 │   ├── app/
 │   │   ├── Http/Controllers/QuoteController.php
@@ -37,14 +38,54 @@ precificacao-viagem/
 
 ## Pré-requisitos
 
+**Execução local**
+
 - PHP 8.2+
 - Composer
 - Node.js 20+
 - npm
 
+**Execução com Docker**
+
+- [Docker](https://www.docker.com/) e Docker Compose
+
 ## Execução
 
-### 1. Backend
+### Com Docker
+
+Na raiz do repositório, suba backend, frontend e PostgreSQL com um único comando:
+
+```bash
+docker compose up --build
+```
+
+| Serviço | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| API | http://localhost:8000 |
+| Health check | http://localhost:8000/up |
+
+O `docker-compose.yml` define três containers:
+
+- **postgres** — banco PostgreSQL 16 (volume persistente `postgres_data`)
+- **backend** — API Laravel; gera o `.env`, executa migrations e inicia em `:8000`
+- **frontend** — Next.js em modo produção; aponta para `http://localhost:8000/api`
+
+Para parar os containers:
+
+```bash
+docker compose down
+```
+
+Para remover também o volume do banco:
+
+```bash
+docker compose down -v
+```
+
+Arquivos relacionados: `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`.
+
+### 1. Backend (local)
 
 ```bash
 cd backend
@@ -95,7 +136,7 @@ DB_PASSWORD=sua_senha
 
 Crie o banco no PostgreSQL e execute `php artisan migrate`. As migrations usam o Schema Builder do Laravel e funcionam da mesma forma que em SQLite e MySQL.
 
-### 2. Frontend
+### 2. Frontend (local)
 
 Em outro terminal:
 
@@ -156,7 +197,7 @@ Retorna dias cobrados, subtotal por viajante, avisos, desconto de grupo e total 
 |---|---|
 | `/` | Formulário para nova cotação |
 | `/resultado` | Detalhe da cotação recém-calculada |
-| `/listar-cotacoes` | Listagem das cotações persistidas (accordion) |
+| `/listar-cotacoes` | Listagem das cotações persistidas |
 
 Fluxo: preencher formulário → calcular → redirecionamento para `/resultado` com o detalhe completo.
 
