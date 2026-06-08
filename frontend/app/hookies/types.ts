@@ -18,12 +18,12 @@ export interface QuoteResult {
   viajantes: Array<{
     nome: string;
     idade: number;
-    subtotal: number;
+    subtotal: string;
     adicionais_aplicados: Adicional[];
   }>;
   avisos: string[];
   desconto_grupo_percentual: number;
-  total_final: number;
+  total_final: string;
 }
 
 export interface QuoteApiError {

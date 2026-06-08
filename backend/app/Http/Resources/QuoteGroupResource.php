@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\MoneyFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,7 @@ class QuoteGroupResource extends JsonResource
     {
         return [
             'dias_cobrados' => $this->dias_cobrados,
-            'total_final' => $this->total_final,
+            'total_final' => MoneyFormatter::format($this->total_final),
             'data_inicio' => $this->data_inicio,
             'data_fim' => $this->data_fim,
             'destino' => $this->destino,

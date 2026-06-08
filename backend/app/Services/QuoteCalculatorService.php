@@ -96,7 +96,7 @@ class QuoteCalculatorService
             'viajante' => [
                 'nome' => $viajante['nome'],
                 'idade' => $idade,
-                'subtotal' => $this->roundForDisplay($subtotal),
+                'subtotal' => $this->roundMoney($subtotal),
                 'adicionais_aplicados' => $this->resolveAppliedAddons($adicionaisSolicitados, $idade),
             ],
             'subtotal_bruto' => $subtotal,
@@ -187,16 +187,13 @@ class QuoteCalculatorService
         $totalGrupo = array_sum($subtotaisBrutos);
         $desconto = $totalGrupo * ($descontoPercentual / 100);
 
-        return $this->roundTotal($totalGrupo - $desconto);
+        return $this->roundMoney($totalGrupo - $desconto);
     }
 
-    private function roundForDisplay(float $value): float
+    private function roundMoney(float $value): float
     {
-        return round($value, 2, PHP_ROUND_HALF_UP);
-    }
+        $rounded = round($value, 2, PHP_ROUND_HALF_UP);
 
-    private function roundTotal(float $value): float
-    {
-        return round($value, 2, PHP_ROUND_HALF_UP);
+        return (float) sprintf('%.2f', $rounded);
     }
 }

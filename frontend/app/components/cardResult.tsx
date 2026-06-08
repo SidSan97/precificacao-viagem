@@ -11,11 +11,11 @@ interface CardResultProps {
   result: QuoteResult;
 }
 
-function formatBRL(value: number): string {
+function formatBRL(value: string | number): string {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
-  }).format(value);
+  }).format(Number(value));
 }
 
 function adicionalLabel(value: Adicional): string {
