@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { formatValidationError } from "./hookies/format-errors";
@@ -35,6 +35,16 @@ export default function Home() {
   const [dataFim, setDataFim] = useState("");
   const [viajantes, setViajantes] = useState<ViajanteForm[]>([createViajante()]);
   const { loading, errors, generalError, submitQuote } = useQuote();
+  const errorSectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!generalError) return;
+
+    errorSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [generalError]);
 
   function updateViajante(
     index: number,
@@ -254,9 +264,12 @@ export default function Home() {
         </form>
 
         {generalError && (
-          <section className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
+          <section
+            ref={errorSectionRef}
+            className="scroll-mt-4 rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800"
+          >
             <h2 className="mb-2 font-medium">Erro</h2>
-            <p className="text-sm">{generalError}</p>
+            { /*<p className="text-sm">{generalError}</p> */}
             {Object.keys(errors).length > 0 && (
               <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
                 {Object.entries(errors).flatMap(([field, messages]) =>
