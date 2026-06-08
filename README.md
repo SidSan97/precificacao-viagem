@@ -8,7 +8,7 @@ Sistema para cotação de seguro viagem. O usuário informa destino, período e 
 |---|---|
 | Backend | PHP 8.2+, Laravel 12 |
 | Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
-| Banco | SQLite (padrão) ou MySQL/MariaDB alem do Postgre
+| Banco | SQLite (padrão), MySQL/MariaDB ou PostgreSQL |
 
 ## Estrutura do repositório
 
@@ -80,6 +80,21 @@ DB_PASSWORD=
 
 Crie o banco no phpMyAdmin e execute `php artisan migrate`.
 
+**Banco PostgreSQL**
+
+O backend expõe o driver `pgsql` em `backend/config/database.php` (porta padrão `5432`). No `.env`, ajuste:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=precificacao_viagem
+DB_USERNAME=postgres
+DB_PASSWORD=sua_senha
+```
+
+Crie o banco no PostgreSQL e execute `php artisan migrate`. As migrations usam o Schema Builder do Laravel e funcionam da mesma forma que em SQLite e MySQL.
+
 ### 2. Frontend
 
 Em outro terminal:
@@ -150,6 +165,7 @@ Fluxo: preencher formulário → calcular → redirecionamento para `/resultado`
 ### Backend
 
 - **Laravel como API REST** — frontend separado em Next.js; comunicação via JSON.
+- **Banco configurável** — SQLite por padrão; MySQL/MariaDB e PostgreSQL via `DB_CONNECTION` em `backend/config/database.php`, sem alteração de código nas migrations ou models.
 - **`QuoteCalculatorService` com métodos privados** — cada regra (dias cobrados, faixa etária, adicionais, desconto de grupo) fica isolada, facilitando leitura e testes unitários.
 - **Idade na data de início da viagem** — o multiplicador etário usa a idade na `data_inicio`, não na data da cotação, para refletir corretamente aniversários entre a simulação e a viagem.
 - **Persistência normalizada** — tabelas `quote_group`, `viajantes` e `avisos` em vez de um único JSON; permite consultas e relacionamentos Eloquent.
