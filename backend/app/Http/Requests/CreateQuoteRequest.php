@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -34,7 +35,19 @@ class CreateQuoteRequest extends FormRequest
             'viajantes' => ['required', 'array', 'min:1'],
             'viajantes.*.nome' => ['required', 'string', 'max:255'],
             'viajantes.*.data_nascimento' => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:today'],
-            'viajantes.*.adicionais' => ['present', 'array', 'distinct'],
+            'viajantes.*.adicionais' => [
+                'present',
+                'array',
+                function (string $attribute, mixed $value, Closure $fail): void {
+                    if (! is_array($value)) {
+                        return;
+                    }
+
+                    if (count($value) !== count(array_unique($value, SORT_STRING))) {
+                        $fail('Não é permitido informar adicionais duplicados.');
+                    }
+                },
+            ],
             'viajantes.*.adicionais.*' => ['string', Rule::in(self::ADICIONAIS)],
         ];
     }
@@ -61,7 +74,6 @@ class CreateQuoteRequest extends FormRequest
             'viajantes.*.data_nascimento.date_format' => 'A data de nascimento do viajante deve ser uma data válida (ex.: 1990-03-15).',
             'viajantes.*.data_nascimento.before_or_equal' => 'A data de nascimento não pode ser uma data futura.',
             'viajantes.*.adicionais.*.in' => 'Os adicionais permitidos são: '.implode(', ', self::ADICIONAIS).'.',
-            'viajantes.*.adicionais.distinct' => 'Não é permitido informar adicionais duplicados.',
         ];
     }
 }
